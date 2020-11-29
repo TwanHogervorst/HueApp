@@ -1,6 +1,6 @@
 package student.avansti.hueapp.data;
 
-public class DLamp {
+public class DLamp extends DAbstract {
 
     public String modelid;
     public String name;
