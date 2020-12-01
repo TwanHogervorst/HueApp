@@ -11,6 +11,11 @@ public class PartPhilipsHueTest extends TestCase {
 
     public void testGetLights() {
 
+        PartPhilipsHue partPhilipsHue = new PartPhilipsHue("192.168.1.43:8000", "newdeveloper");
+        List<DLamp> lampList = partPhilipsHue.getLamps();
+
+        assertNotNull(lampList);
+        assertTrue(lampList.size() > 0);
 
 
     }
