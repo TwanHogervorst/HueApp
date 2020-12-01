@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import student.avansti.hueapp.data.DLamp;
+
 public class LampAdapter extends RecyclerView.Adapter<LampAdapter.LampViewHolder> {
 
     private Context AppContext;
-    private List<PhilipsLamp> lampList;
+    private List<DLamp> lampList;
     private OnItemClickListener clickListener;
 
     public interface OnItemClickListener{
@@ -41,7 +43,7 @@ public class LampAdapter extends RecyclerView.Adapter<LampAdapter.LampViewHolder
         }
     }
 
-    public LampAdapter(Context appContext, List<PhilipsLamp> lampList, OnItemClickListener clickListener) {
+    public LampAdapter(Context appContext, List<DLamp> lampList, OnItemClickListener clickListener) {
         AppContext = appContext;
         this.lampList = lampList;
         this.clickListener = clickListener;
@@ -57,8 +59,8 @@ public class LampAdapter extends RecyclerView.Adapter<LampAdapter.LampViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull LampViewHolder holder, int position) {
-        PhilipsLamp lamp = lampList.get(position);
-        holder.textView.setText(lamp.GetCaption());
+        DLamp lamp = lampList.get(position);
+        holder.textView.setText(lamp.getCaption());
     }
 
     @Override

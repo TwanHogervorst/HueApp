@@ -8,24 +8,34 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Dispatcher;
+import student.avansti.hueapp.data.DLamp;
+import student.avansti.hueapp.parts.PartPhilipsHue;
 
 public class MainActivity extends AppCompatActivity implements LampAdapter.OnItemClickListener{
 
-    private ArrayList<PhilipsLamp> lamps;
+    private List<DLamp> lamps;
     private LampAdapter lampAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        lamps = new ArrayList<>();
-        lamps.add(new PhilipsLamp("lamp","on", "red", "30 nov", "lightbulb", "6789"));
-        lamps.add(new PhilipsLamp("lamp two","off", "yellow", "29 nov", "lightbulb", "1234"));
+        this.lamps = new ArrayList<>();
         lampAdapter = new LampAdapter(this,lamps,this);
 
+        new Thread(() -> {
+            this.lamps.addAll(new PartPhilipsHue("192.168.1.43:80", "newdeveloper").getLamps());
+            this.runOnUiThread(() -> {
+                this.lampAdapter.notifyDataSetChanged();
+            });
+        }).start();
+
         RecyclerView list = findViewById(R.id.recyclerview_main);
-        list.setAdapter(lampAdapter);
         list.setLayoutManager(new LinearLayoutManager(this));
+        list.setAdapter(lampAdapter);
     }
 
     @Override
