@@ -1,6 +1,7 @@
 package student.avansti.hueapp;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,10 +30,12 @@ public class LampAdapter extends RecyclerView.Adapter<LampAdapter.LampViewHolder
     class LampViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public final TextView textView;
+        public final ImageView imageView;
 
         public LampViewHolder(View itemView, LampAdapter adapter) {
             super(itemView);
             textView = itemView.findViewById(R.id.item_list_textView);
+            imageView = itemView.findViewById(R.id.item_list_imageView);
             itemView.setOnClickListener(this);
         }
 
@@ -61,6 +64,12 @@ public class LampAdapter extends RecyclerView.Adapter<LampAdapter.LampViewHolder
     public void onBindViewHolder(@NonNull LampViewHolder holder, int position) {
         DLamp lamp = lampList.get(position);
         holder.textView.setText(lamp.getCaption());
+        int rgb = Color.HSVToColor(new float[] {
+                (float)Utility.map(lamp.state.hue, 0, 65535, 0, 360),
+                (float)Utility.map(lamp.state.sat,0, 254,0,1),
+                (float) Utility.map(lamp.state.bri,1,254,0, 1)
+        });
+        holder.imageView.setColorFilter(rgb);
     }
 
     @Override

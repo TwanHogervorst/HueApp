@@ -11,9 +11,21 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="TextView"
-        android:textSize="30dp"
+        android:textSize="20dp"
         android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/item_background"
          />
+
+    <ImageView
+        android:id="@+id/item_list_imageView"
+        android:layout_width="51dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/item_list_textView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/item_color" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
