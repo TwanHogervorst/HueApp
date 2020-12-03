@@ -26,8 +26,9 @@ public class DetailActivity extends AppCompatActivity {
         TextView lastInstall = findViewById(R.id.lastInstall);
         TextView type = findViewById(R.id.type);
         TextView modelID = findViewById(R.id.modelID);
+        ImageView image = findViewById(R.id.imageView_detail);
 
-        name.setText(lamp.name);
+        name.setText("Lamp name: " + lamp.name);
         state.setText(lamp.state.toJson());
 
         int rgb = Color.HSVToColor(new float[] {
@@ -37,9 +38,11 @@ public class DetailActivity extends AppCompatActivity {
         });
 
         color.setText(Color.valueOf(rgb).toString());
-        lastInstall.setText(lamp.swversion);
-        type.setText(lamp.type);
-        modelID.setText(lamp.modelid);
+
+        image.setColorFilter(rgb);
+        lastInstall.setText("Version: " + lamp.swversion);
+        type.setText("Type: " + lamp.type);
+        modelID.setText("ModelID: " + lamp.modelid);
 
     }
 }

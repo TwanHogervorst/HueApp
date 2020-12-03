@@ -4,22 +4,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    >
 
+    <TextView
+        android:id="@+id/detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Lamp details"
+        android:textAlignment="center"
+        android:textSize="30dp"
+        android:textColor="@color/teal_200"
+        android:background="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+
+        />
     <TextView
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="name"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="@color/teal_200"
+        android:background="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/detail_title" />
 
     <TextView
         android:id="@+id/state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="state"
-        android:textColor="@color/black"
+        android:textColor="@color/teal_200"
+        android:background="@color/black"
         app:layout_constraintTop_toBottomOf="@id/name"
         />
 
@@ -28,7 +44,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="color"
-        android:textColor="@color/black"
+        android:textColor="@color/teal_200"
+        android:background="@color/black"
         app:layout_constraintTop_toBottomOf="@id/state"
         />
 
@@ -37,7 +54,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="last install"
-        android:textColor="@color/black"
+        android:textColor="@color/teal_200"
+        android:background="@color/black"
         app:layout_constraintTop_toBottomOf="@id/color"
         />
 
@@ -46,7 +64,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="type"
-        android:textColor="@color/black"
+        android:textColor="@color/teal_200"
+        android:background="@color/black"
         app:layout_constraintTop_toBottomOf="@id/lastInstall"
         />
 
@@ -55,7 +74,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=" ModelID"
-        android:textColor="@color/black"
+        android:textColor="@color/teal_200"
+        android:background="@color/black"
         app:layout_constraintTop_toBottomOf="@id/type"
         />
+
+    <ImageView
+        android:id="@+id/imageView_detail"
+        android:layout_width="283dp"
+        android:layout_height="405dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/modelID"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
 </androidx.constraintlayout.widget.ConstraintLayout>
