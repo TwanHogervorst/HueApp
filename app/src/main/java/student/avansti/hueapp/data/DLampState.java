@@ -1,5 +1,8 @@
 package student.avansti.hueapp.data;
 
+import student.avansti.hueapp.Color;
+import student.avansti.hueapp.Utility;
+
 public class DLampState extends DAbstract {
 
     public int[] xy;
@@ -12,5 +15,13 @@ public class DLampState extends DAbstract {
     public String colormode;
     public boolean reachable;
     public boolean on;
+
+    public Color getColor() {
+        return Color.fromHSV(
+                Utility.map(this.hue, 0, 65535, 0, 1),
+                Utility.map(this.sat,0, 254,0,1),
+                Utility.map(this.bri,1,254,0, 1)
+        );
+    }
 
 }

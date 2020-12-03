@@ -16,4 +16,18 @@ public class Utility {
         return ((value - start1) / (stop1 - start1) * (stop2 - start2) + start2);
     }
 
+    public static float map(float value, float start1, float stop1, float start2, float stop2){
+        return ((value - start1) / (stop1 - start1) * (stop2 - start2) + start2);
+    }
+
+    public static float round(float value, int decimals) {
+        float pow = (float)Math.pow(10, decimals);
+        return Math.round(value * pow) / pow;
+    }
+
+    public static double round(double value, int decimals) {
+        double pow = Math.pow(10, decimals);
+        return Math.round(value * pow) / pow;
+    }
+
 }

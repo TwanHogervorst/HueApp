@@ -30,10 +30,11 @@ public class DetailActivity extends AppCompatActivity {
 
         name.setText("Lamp name: " + lamp.name);
         state.setText(lamp.state.toJson());
+
         int rgb = Color.HSVToColor(new float[] {
                 (float)Utility.map(lamp.state.hue, 0, 65535, 0, 360),
                 (float)Utility.map(lamp.state.sat,0, 254,0,1),
-                (float) Utility.map(lamp.state.bri,1,254,0, 1)
+                (float)Utility.map(lamp.state.bri,1,254,0, 1)
         });
 
         color.setText(Color.valueOf(rgb).toString());
