@@ -31,6 +31,7 @@ public class DetailActivity extends AppCompatActivity {
     private DLamp lamp = new DLamp();
     private ImageView image;
     private TextView state;
+    private PickerGroup<IntegerHSLColor> colorPickerGroup = new PickerGroup<>();
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +45,6 @@ public class DetailActivity extends AppCompatActivity {
         TextView type = findViewById(R.id.type);
         TextView modelID = findViewById(R.id.modelID);
         state = findViewById(R.id.state);
-        image.setColorFilter(Color.WHITE);
         HSLColorPickerSeekBar hueSeekBar = findViewById(R.id.hueSeekBar);
         HSLColorPickerSeekBar satSeekBar = findViewById(R.id.satSeekBar);
         HSLColorPickerSeekBar ligSeekBar = findViewById(R.id.ligSeekBar);
@@ -53,35 +53,30 @@ public class DetailActivity extends AppCompatActivity {
         lastInstall.setText(" Version: " + lamp.swversion);
         type.setText(" Type: " + lamp.type);
         modelID.setText(" ModelID: " + lamp.modelid);
+
         if (lamp.state.on) {
             state.setText("ON");
+            image.setColorFilter(lamp.state.getColor().asAndroidColor().toArgb());
         }else{
             state.setText("OFF");
+            image.setColorFilter(android.graphics.Color.WHITE);
         }
-    }
 
-    public void onClick(View view){
-        lamp.state.on = !lamp.state.on;
-        if (lamp.state.on){
-            int rgb = Color.HSVToColor(new float[] {
-                    (float)Utility.map(lamp.state.hue, 0, 65535, 0, 360),
-                    (float)Utility.map(lamp.state.sat,0, 254,0,1),
-                    (float)Utility.map(lamp.state.bri,1,254,0, 1)
-            });
+        colorPickerGroup.registerPicker(hueSeekBar);
+        colorPickerGroup.registerPicker(satSeekBar);
+        colorPickerGroup.registerPicker(ligSeekBar);
 
-            image.setColorFilter(rgb);
-            state.setText("ON");
-        }else{
-            image.setColorFilter(Color.WHITE);
-            state.setText("OFF");
-        }
-        image.setColorFilter(lamp.state.getColor().asAndroidColor().toArgb());
-        PickerGroup<IntegerHSLColor> group = new PickerGroup<>();
-        group.registerPicker(hueSeekBar);
-        group.registerPicker(satSeekBar);
-        group.registerPicker(ligSeekBar);
+        float[] hsl = new float[3];
+        ColorUtils.colorToHSL(this.lamp.state.getColor().rgbAsInt(), hsl);
 
-        group.addListener(new HSLColorPickerSeekBar.DefaultOnColorPickListener() {
+        IntegerHSLColor hslColor = new IntegerHSLColor();
+        hslColor.setFloatH(hsl[0]);
+        hslColor.setFloatS(hsl[1]);
+        hslColor.setFloatL(hsl[2]);
+
+        colorPickerGroup.setColor(hslColor);
+
+        colorPickerGroup.addListener(new HSLColorPickerSeekBar.DefaultOnColorPickListener() {
             @Override
             public void onColorChanged(@NotNull ColorSeekBar<IntegerHSLColor> picker, @NotNull IntegerHSLColor color, int value) {
                 float[] hsl = new float[] {
@@ -96,30 +91,64 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onColorPicked(@NotNull ColorSeekBar<IntegerHSLColor> picker, @NotNull IntegerHSLColor color, int value, boolean fromUser) {
 
-                new Thread(() -> {
-                    PartPhilipsHue partPhilipsHue = new PartPhilipsHue("192.168.1.43:80", "newdeveloper");
-
+                if(fromUser) {
                     float[] hsl = new float[] {
                             color.getFloatH(),
                             color.getFloatS(),
                             color.getFloatL()
                     };
 
-                    partPhilipsHue.setLampColor(lamp.id,Color.fromRgbInt(ColorUtils.HSLToColor(hsl)));
-                }).start();
+                    DetailActivity.this.setLampColor(Color.fromRgbInt(ColorUtils.HSLToColor(hsl)));
+                }
 
             }
         });
+    }
+
+    public void onClick(View view){
+        lamp.state.on = !lamp.state.on;
+        if (lamp.state.on){
+            state.setText("ON");
+
+            new Thread(() -> {
+                PartPhilipsHue partPhilipsHue = new PartPhilipsHue("192.168.1.43:80", "newdeveloper");
+                partPhilipsHue.setLampPowerState(this.lamp, true);
+                this.lamp = partPhilipsHue.getLampById(this.lamp.id);
+
+                this.runOnUiThread(() -> {
+                    this.image.setColorFilter(lamp.state.getColor().asAndroidColor().toArgb());
+                });
+            }).start();
+        }else{
+            image.setColorFilter(android.graphics.Color.WHITE);
+            state.setText("OFF");
+
+            new Thread(() -> {
+                PartPhilipsHue partPhilipsHue = new PartPhilipsHue("192.168.1.43:80", "newdeveloper");
+                partPhilipsHue.setLampPowerState(this.lamp, false);
+                this.lamp = partPhilipsHue.getLampById(this.lamp.id);
+            }).start();
+        }
+    }
+
+    private void setLampColor(Color color) {
+        new Thread(() -> {
+            PartPhilipsHue partPhilipsHue = new PartPhilipsHue("192.168.1.43:80", "newdeveloper");
+            partPhilipsHue.setLampColor(this.lamp, color);
+            this.lamp = partPhilipsHue.getLampById(this.lamp.id);
+        }).start();
 
         float[] hsl = new float[3];
-        ColorUtils.colorToHSL(lamp.state.getColor().rgbAsInt(), hsl);
+        ColorUtils.colorToHSL(color.rgbAsInt(), hsl);
 
         IntegerHSLColor hslColor = new IntegerHSLColor();
         hslColor.setFloatH(hsl[0]);
         hslColor.setFloatS(hsl[1]);
         hslColor.setFloatL(hsl[2]);
 
-        group.setColor(hslColor);
+        colorPickerGroup.setColor(hslColor);
 
+        this.image.setColorFilter(color.asAndroidColor().toArgb());
+        this.state.setText("ON");
     }
 }
