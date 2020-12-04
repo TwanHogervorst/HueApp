@@ -46,6 +46,7 @@ public class LampListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        view.findViewById(R.id.imageView2).setOnClickListener(this::onClick);
 
         this.lampViewModel = new ViewModelProvider(this.requireActivity()).get(LampViewModel.class);
         this.lampViewModel.getLamps().observe(getViewLifecycleOwner(), lampList -> {
@@ -69,6 +70,17 @@ public class LampListFragment extends Fragment {
         list.setAdapter(this.lampAdapter);
 
         this.refreshLamps();
+    }
+
+    @Override
+    public void onItemClick(int clickedPosition) {
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.action_lampListFragment_to_lampDetailFragment);
+    }
+
+    public void onClick(View view){
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.action_lampListFragment_to_lampSettingsFragment);
     }
 
     private void refreshLamps() {

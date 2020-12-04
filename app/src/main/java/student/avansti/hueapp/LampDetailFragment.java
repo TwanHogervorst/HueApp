@@ -51,6 +51,7 @@ public class LampDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         this.image = view.findViewById(R.id.imageView_detail);
+        this.image.setOnClickListener(this::onClick);
 
         this.lampViewModel = new ViewModelProvider(this.requireActivity()).get(LampViewModel.class);
         this.lamp = this.lampViewModel.getSelectedLamp().getValue();
