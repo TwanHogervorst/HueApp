@@ -26,21 +26,21 @@ public class ColorTest extends TestCase {
         // rgb -> hsb values correct
         Color rgbColor = new Color(95, 209, 50);
 
-        assertEquals(0.286f, Utility.round(rgbColor.hue(),3));
-        assertEquals(0.761f, Utility.round(rgbColor.saturation(),3));
-        assertEquals(0.820f, Utility.round(rgbColor.brightness(),3));
+        assertEquals(103, (int)Math.round(rgbColor.hue()));
+        assertEquals(76.1, Utility.round(rgbColor.saturation(),1));
+        assertEquals(82.0, Utility.round(rgbColor.brightness(),1));
 
         // hsb -> rgb values correct
-        Color hsbColor = Color.fromHSV(0.286f, 0.761f,0.820f);
+        Color hsbColor = Color.fromHSV(103, 76.1,82.0);
 
         assertEquals(95, hsbColor.red());
         assertEquals(209,hsbColor.green());
         assertEquals(50, hsbColor.blue());
 
         // hsb -> hsb values the same
-        assertEquals(0.286f, Utility.round(hsbColor.hue(),3));
-        assertEquals(0.761f, Utility.round(hsbColor.saturation(),3));
-        assertEquals(0.820f, Utility.round(hsbColor.brightness(),3));
+        assertEquals(103, (int)Math.round(rgbColor.hue()));
+        assertEquals(76.1, Utility.round(hsbColor.saturation(),1));
+        assertEquals(82.0, Utility.round(hsbColor.brightness(),1));
 
         // rgb == hsb
         assertEquals(rgbColor, hsbColor);
@@ -51,7 +51,7 @@ public class ColorTest extends TestCase {
 
         // test pure (red) color
         // covers bug where a pure red, green or blue color results in black (r=0;g=0;b=0)
-        Color redColor = Color.fromHSV(0, 1, 1);
+        Color redColor = Color.fromHSV(0, 100, 100);
 
         assertEquals(new Color(255, 0, 0), redColor);
 

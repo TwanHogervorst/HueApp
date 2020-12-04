@@ -106,11 +106,6 @@ public class PartPhilipsHue {
 
         DSetPowerStateRequestBody body = new DSetPowerStateRequestBody(onState);
 
-        Request requestCall = new Request.Builder()
-                .put(RequestBody.create(body.toJson(), MediaType.parse("application/json")))
-                .url(partUrl.result())
-                .build();
-
         this.doApiRequest("PUT", partUrl, body, true);
     }
 
@@ -183,9 +178,9 @@ public class PartPhilipsHue {
         public boolean on = true;
 
         public DSetColorRequestBody(Color clr) {
-            this.hue = Math.round(Utility.map(clr.hue(), 0, 1, 0, 65535));
-            this.sat = Math.round(Utility.map(clr.saturation(), 0, 1, 0, 254));
-            this.bri = Math.round(Utility.map(clr.brightness(), 0, 1, 1, 254));
+            this.hue = (int)Math.round(Utility.map(clr.hue(), 0, 360, 0, 65535));
+            this.sat = (int)Math.round(Utility.map(clr.saturation(), 0, 100, 0, 254));
+            this.bri = (int)Math.round(Utility.map(clr.brightness(), 0, 100, 1, 254));
         }
 
     }

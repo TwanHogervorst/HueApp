@@ -12,9 +12,9 @@ public class Color {
     private int g;
     private int b;
 
-    private float h;
-    private float s;
-    private float v;
+    private double h;
+    private double s;
+    private double v;
 
     public Color(int r, int g, int b) {
         this.r = r % 256;
@@ -36,15 +36,15 @@ public class Color {
         return this.b;
     }
 
-    public float hue() {
+    public double hue() {
         return this.h;
     }
 
-    public float saturation() {
+    public double saturation() {
         return this.s;
     }
 
-    public float brightness() {
+    public double brightness() {
         return this.v;
     }
 
@@ -84,15 +84,15 @@ public class Color {
     private void calculateHSV() {
         // R, G, B values are divided by 255
         // to change the range from 0..255 to 0..1
-        float r = this.r / 255.0f;
-        float g = this.g / 255.0f;
-        float b = this.b / 255.0f;
+        double r = this.r / 255.0;
+        double g = this.g / 255.0;
+        double b = this.b / 255.0;
 
         // h, s, v = hue, saturation, value
-        float cmax = Math.max(r, Math.max(g, b)); // maximum of r, g, b
-        float cmin = Math.min(r, Math.min(g, b)); // minimum of r, g, b
-        float diff = cmax - cmin; // diff of cmax and cmin.
-        float h = -1, s = -1;
+        double cmax = Math.max(r, Math.max(g, b)); // maximum of r, g, b
+        double cmin = Math.min(r, Math.min(g, b)); // minimum of r, g, b
+        double diff = cmax - cmin; // diff of cmax and cmin.
+        double h = -1, s = -1;
 
         // if cmax and cmax are equal then h = 0
         if (cmax == cmin)
@@ -117,34 +117,40 @@ public class Color {
             s = (diff / cmax) * 100;
 
         // compute v
-        float v = cmax * 100;
+        double v = cmax * 100;
 
-        this.h = Utility.map(h, 0, 360, 0, 1);
-        this.s = Utility.map(s,0,100,0,1);
-        this.v = Utility.map(v,0,100,0,1);
+        this.h = h;
+        this.s = s;
+        this.v = v;
     }
 
     public static Color fromAndroidColor(@NotNull android.graphics.Color clr) {
         return Color.fromFloatRgb(clr.red(), clr.green(),clr.blue());
     }
 
-    // Source: https://stackoverflow.com/questions/7896280/converting-from-hsv-hsb-in-java-to-rgb-without-using-java-awt-color-disallowe
-    public static Color fromHSV(float hue, float sat, float val) {
+    // Source: https://www.rapidtables.com/convert/color/hsv-to-rgb.html
+    public static Color fromHSV(double hue, double sat, double val) {
         Color result = null;
 
-        int h = (int)(hue * 6);
-        float f = hue * 6 - h;
-        float p = val * (1 - sat);
-        float q = val * (1 - f * sat);
-        float t = val * (1 - (1 - f) * sat);
+        hue %= 360;
+        sat = Math.min(sat, 100) / 100.0;
+        val = Math.min(val, 100) / 100.0;
+
+        int h = (int)(hue / 60);
+        double c = val * sat;
+        double x = c * (1 - Math.abs((hue / 60.0) % 2 - 1));
+        double m = val - c;
+
+        c += m;
+        x += m;
 
         switch (h) {
-            case 0: result = Color.fromFloatRgb(val, t, p); break;
-            case 1: result = Color.fromFloatRgb(q, val, p); break;
-            case 2: result = Color.fromFloatRgb(p, val, t); break;
-            case 3: result = Color.fromFloatRgb(p, q, val); break;
-            case 4: result = Color.fromFloatRgb(t, p, val); break;
-            case 5: result = Color.fromFloatRgb(val, p, q); break;
+            case 0: result = Color.fromDoubleRgb(c, x, m); break;
+            case 1: result = Color.fromDoubleRgb(x, c, m); break;
+            case 2: result = Color.fromDoubleRgb(m, c, x); break;
+            case 3: result = Color.fromDoubleRgb(m, x, c); break;
+            case 4: result = Color.fromDoubleRgb(x, m, c); break;
+            case 5: result = Color.fromDoubleRgb(c, m, x); break;
             default: result = new Color(0, 0, 0);
         }
 
@@ -153,9 +159,17 @@ public class Color {
 
     private static Color fromFloatRgb(float r, float g, float b) {
         return new Color(
-                (int)Utility.map(r, 0, 1,0,255),
-                (int)Utility.map(g,0,1, 0, 255),
-                (int)Utility.map(b, 0, 1, 0, 255)
+                Math.round(r * 255f),
+                Math.round(g * 255f),
+                Math.round(b * 255f)
+        );
+    }
+
+    private static Color fromDoubleRgb(double r, double g, double b) {
+        return new Color(
+                (int)Math.round(r * 255.0),
+                (int)Math.round(g * 255.0),
+                (int)Math.round(b * 255.0)
         );
     }
 
