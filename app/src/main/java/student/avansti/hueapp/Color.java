@@ -56,6 +56,10 @@ public class Color {
         );
     }
 
+    public int rgbAsInt() {
+        return (this.r << 16) | (this.g << 8) | this.b;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -155,6 +159,14 @@ public class Color {
         }
 
         return result;
+    }
+
+    public static Color fromRgbInt(int rgb) {
+        return new Color(
+                (rgb >> 16) & 0xFF,
+                (rgb >> 8) & 0xFF,
+                rgb & 0xFF
+        );
     }
 
     private static Color fromFloatRgb(float r, float g, float b) {

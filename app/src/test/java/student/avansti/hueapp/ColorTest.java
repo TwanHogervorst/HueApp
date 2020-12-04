@@ -47,6 +47,15 @@ public class ColorTest extends TestCase {
 
     }
 
+    public void testColorRgbAsInt() {
+        Color clr = new Color(170,170, 170);
+        Color clr2 = Color.fromRgbInt(0xAAAAAA);
+
+        assertEquals(0xAAAAAA, clr.rgbAsInt());
+        assertEquals(clr, clr2);
+
+    }
+
     public void testColorBugCoverage() {
 
         // test pure (red) color
