@@ -1,12 +1,17 @@
 package student.avansti.hueapp;
 
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.graphics.ColorUtils;
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.ColorUtils;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -15,50 +20,63 @@ import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar;
 import codes.side.andcolorpicker.model.IntegerHSLColor;
 import codes.side.andcolorpicker.view.picker.ColorSeekBar;
 import student.avansti.hueapp.data.DLamp;
+import student.avansti.hueapp.data.DLampState;
 import student.avansti.hueapp.parts.PartPhilipsHue;
 
-public class DetailActivity extends AppCompatActivity {
+public class LampDetailFragment extends Fragment {
 
-    public static final String detail = "Philips lamp";
-    private DLamp lamp = new DLamp();
+    private DLamp lamp;
     private ImageView image;
     private TextView state;
     private PickerGroup<IntegerHSLColor> colorPickerGroup = new PickerGroup<>();
 
-    protected void onCreate(Bundle savedInstanceState) {
+    public LampDetailFragment() {
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+    }
 
-        image = findViewById(R.id.imageView_detail);
-        lamp = (DLamp) getIntent().getSerializableExtra(detail);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_lamp_detail, container, false);
+    }
 
-        TextView name = findViewById(R.id.name);
-        TextView lastInstall = findViewById(R.id.lastInstall);
-        TextView type = findViewById(R.id.type);
-        TextView modelID = findViewById(R.id.modelID);
-        state = findViewById(R.id.state);
-        HSLColorPickerSeekBar hueSeekBar = findViewById(R.id.hueSeekBar);
-        HSLColorPickerSeekBar satSeekBar = findViewById(R.id.satSeekBar);
-        HSLColorPickerSeekBar ligSeekBar = findViewById(R.id.ligSeekBar);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        name.setText(" Lamp name: " + lamp.name);
-        lastInstall.setText(" Version: " + lamp.swversion);
-        type.setText(" Type: " + lamp.type);
-        modelID.setText(" ModelID: " + lamp.modelid);
+        this.image = view.findViewById(R.id.imageView_detail);
+        this.lamp = new DLamp(); // todo: Get lamp
 
-        if (lamp.state.on) {
-            state.setText("ON");
-            image.setColorFilter(lamp.state.getColor().asAndroidColor().toArgb());
-            image.setImageResource(R.drawable.ic_lamp_on);
+        TextView name = view.findViewById(R.id.name);
+        TextView lastInstall = view.findViewById(R.id.lastInstall);
+        TextView type = view.findViewById(R.id.type);
+        TextView modelID = view.findViewById(R.id.modelID);
+        this.state = view.findViewById(R.id.state);
+        HSLColorPickerSeekBar hueSeekBar = view.findViewById(R.id.hueSeekBar);
+        HSLColorPickerSeekBar satSeekBar = view.findViewById(R.id.satSeekBar);
+        HSLColorPickerSeekBar ligSeekBar = view.findViewById(R.id.ligSeekBar);
+
+        name.setText(" Lamp name: " + this.lamp.name);
+        lastInstall.setText(" Version: " + this.lamp.swversion);
+        type.setText(" Type: " + this.lamp.type);
+        modelID.setText(" ModelID: " + this.lamp.modelid);
+
+        if (this.lamp.state.on) {
+            this.state.setText("ON");
+            this.image.setColorFilter(this.lamp.state.getColor().asAndroidColor().toArgb());
+            this.image.setImageResource(R.drawable.ic_lamp_on);
         }else{
-            state.setText("OFF");
-            image.setColorFilter(android.graphics.Color.WHITE);
-            image.setImageResource(R.drawable.ic_lamp_off);
+            this.state.setText("OFF");
+            this.image.setColorFilter(android.graphics.Color.WHITE);
+            this.image.setImageResource(R.drawable.ic_lamp_off);
         }
 
-        colorPickerGroup.registerPicker(hueSeekBar);
-        colorPickerGroup.registerPicker(satSeekBar);
-        colorPickerGroup.registerPicker(ligSeekBar);
+        this.colorPickerGroup.registerPicker(hueSeekBar);
+        this.colorPickerGroup.registerPicker(satSeekBar);
+        this.colorPickerGroup.registerPicker(ligSeekBar);
 
         float[] hsl = new float[3];
         ColorUtils.colorToHSL(this.lamp.state.getColor().rgbAsInt(), hsl);
@@ -68,9 +86,9 @@ public class DetailActivity extends AppCompatActivity {
         hslColor.setFloatS(hsl[1]);
         hslColor.setFloatL(hsl[2]);
 
-        colorPickerGroup.setColor(hslColor);
+        this.colorPickerGroup.setColor(hslColor);
 
-        colorPickerGroup.addListener(new HSLColorPickerSeekBar.DefaultOnColorPickListener() {
+        this.colorPickerGroup.addListener(new HSLColorPickerSeekBar.DefaultOnColorPickListener() {
             @Override
             public void onColorChanged(@NotNull ColorSeekBar<IntegerHSLColor> picker, @NotNull IntegerHSLColor color, int value) {
                 float[] hsl = new float[] {
@@ -79,7 +97,7 @@ public class DetailActivity extends AppCompatActivity {
                         color.getFloatL()
                 };
 
-                image.setColorFilter(ColorUtils.HSLToColor(hsl));
+                LampDetailFragment.this.image.setColorFilter(ColorUtils.HSLToColor(hsl));
             }
 
             @Override
@@ -92,7 +110,7 @@ public class DetailActivity extends AppCompatActivity {
                             color.getFloatL()
                     };
 
-                    DetailActivity.this.setLampColor(Color.fromRgbInt(ColorUtils.HSLToColor(hsl)));
+                    LampDetailFragment.this.setLampColor(Color.fromRgbInt(ColorUtils.HSLToColor(hsl)));
                 }
 
             }
@@ -105,7 +123,7 @@ public class DetailActivity extends AppCompatActivity {
             partPhilipsHue.setLampPowerState(this.lamp, !this.lamp.state.on);
             this.lamp = partPhilipsHue.getLampById(this.lamp.id);
 
-            this.runOnUiThread(() -> {
+            this.getActivity().runOnUiThread(() -> {
                 if(this.lamp.state.on) {
                     this.state.setText("ON");
                     this.image.setColorFilter(lamp.state.getColor().asAndroidColor().toArgb());
@@ -126,7 +144,7 @@ public class DetailActivity extends AppCompatActivity {
             partPhilipsHue.setLampColor(this.lamp, color);
             this.lamp = partPhilipsHue.getLampById(this.lamp.id);
 
-            this.runOnUiThread(() -> {
+            this.getActivity().runOnUiThread(() -> {
                 if(this.lamp.state.on) {
                     this.state.setText("ON");
                     this.image.setColorFilter(lamp.state.getColor().asAndroidColor().toArgb());

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/nav_graph"
+    app:startDestination="@id/lampListFragment">
+
+    <fragment
+        android:id="@+id/lampListFragment"
+        android:name="student.avansti.hueapp.LampListFragment"
+        android:label="LampListFragment" >
+        <action
+            android:id="@+id/action_lampListFragment_to_lampDetailFragment"
+            app:destination="@id/lampDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/lampDetailFragment"
+        android:name="student.avansti.hueapp.LampDetailFragment"
+        android:label="LampDetailFragment" >
+        <action
+            android:id="@+id/action_lampDetailFragment_to_lampListFragment"
+            app:destination="@id/lampListFragment" />
+    </fragment>
+</navigation>

@@ -5,7 +5,7 @@ import student.avansti.hueapp.Utility;
 
 public class DLampState extends DAbstract {
 
-    public int[] xy;
+    public int[] xy = new int[2];
     public int ct;
     public String alert;
     public int sat;
