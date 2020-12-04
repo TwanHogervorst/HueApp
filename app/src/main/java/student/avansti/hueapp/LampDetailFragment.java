@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.graphics.ColorUtils;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +23,11 @@ import codes.side.andcolorpicker.view.picker.ColorSeekBar;
 import student.avansti.hueapp.data.DLamp;
 import student.avansti.hueapp.data.DLampState;
 import student.avansti.hueapp.parts.PartPhilipsHue;
+import student.avansti.hueapp.viewmodels.LampViewModel;
 
 public class LampDetailFragment extends Fragment {
 
+    private LampViewModel lampViewModel;
     private DLamp lamp;
     private ImageView image;
     private TextView state;
@@ -48,7 +51,9 @@ public class LampDetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         this.image = view.findViewById(R.id.imageView_detail);
-        this.lamp = new DLamp(); // todo: Get lamp
+
+        this.lampViewModel = new ViewModelProvider(this.requireActivity()).get(LampViewModel.class);
+        this.lamp = this.lampViewModel.getSelectedLamp().getValue();
 
         TextView name = view.findViewById(R.id.name);
         TextView lastInstall = view.findViewById(R.id.lastInstall);
@@ -167,5 +172,12 @@ public class LampDetailFragment extends Fragment {
         hslColor.setFloatL(hsl[2]);
 
         colorPickerGroup.setColor(hslColor);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        this.lampViewModel.select(null);
     }
 }

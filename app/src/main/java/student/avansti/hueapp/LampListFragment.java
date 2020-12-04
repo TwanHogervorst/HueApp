@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,10 +21,11 @@ import java.util.List;
 
 import student.avansti.hueapp.data.DLamp;
 import student.avansti.hueapp.parts.PartPhilipsHue;
+import student.avansti.hueapp.viewmodels.LampViewModel;
 
-public class LampListFragment extends Fragment implements LampAdapter.OnItemClickListener {
+public class LampListFragment extends Fragment {
 
-    private List<DLamp> lamps;
+    private LampViewModel lampViewModel;
     private LampAdapter lampAdapter;
     private SwipeRefreshLayout swiperefresh_main;
 
@@ -45,11 +47,23 @@ public class LampListFragment extends Fragment implements LampAdapter.OnItemClic
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        this.lampViewModel = new ViewModelProvider(this.requireActivity()).get(LampViewModel.class);
+        this.lampViewModel.getLamps().observe(getViewLifecycleOwner(), lampList -> {
+            this.lampAdapter.notifyDataSetChanged();
+            this.swiperefresh_main.setRefreshing(false);
+        });
+
+        this.lampViewModel.getSelectedLamp().observe(getViewLifecycleOwner(), selectedLamp -> {
+            if(selectedLamp != null) {
+                NavHostFragment.findNavController(this)
+                        .navigate(R.id.action_lampListFragment_to_lampDetailFragment);
+            }
+        });
+
         this.swiperefresh_main = view.findViewById(R.id.swiperefresh_main);
         this.swiperefresh_main.setOnRefreshListener(this::refreshLamps);
 
-        this.lamps = new ArrayList<>();
-        this.lampAdapter = new LampAdapter(this.getContext(), this.lamps,this);
+        this.lampAdapter = new LampAdapter(this.lampViewModel);
         RecyclerView list = view.findViewById(R.id.recyclerview_main);
         list.setLayoutManager(new LinearLayoutManager(this.getContext()));
         list.setAdapter(this.lampAdapter);
@@ -57,22 +71,8 @@ public class LampListFragment extends Fragment implements LampAdapter.OnItemClic
         this.refreshLamps();
     }
 
-    @Override
-    public void onItemClick(int clickedPosition) {
-        NavHostFragment.findNavController(this)
-                .navigate(R.id.action_lampListFragment_to_lampDetailFragment);
-    }
-
     private void refreshLamps() {
         this.swiperefresh_main.setRefreshing(true);
-
-        new Thread(() -> {
-            this.lamps.clear();
-            this.lamps.addAll(PartPhilipsHue.getInstance().getLamps());
-            this.getActivity().runOnUiThread(() -> {
-                this.lampAdapter.notifyDataSetChanged();
-                this.swiperefresh_main.setRefreshing(false);
-            });
-        }).start();
+        this.lampViewModel.refreshLamps();
     }
 }

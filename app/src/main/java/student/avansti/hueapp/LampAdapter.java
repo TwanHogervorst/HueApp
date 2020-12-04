@@ -8,26 +8,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 import student.avansti.hueapp.data.DLamp;
+import student.avansti.hueapp.viewmodels.LampViewModel;
 
 public class LampAdapter extends RecyclerView.Adapter<LampAdapter.LampViewHolder> {
 
-    private Context AppContext;
-    private List<DLamp> lampList;
-    private OnItemClickListener clickListener;
+    private LampViewModel lampVM;
 
-    public interface OnItemClickListener{
-        void onItemClick(int clickedPosition);
-    }
+    class LampViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-    class LampViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        private final TextView textView;
+        private final ImageView imageView;
 
-        public final TextView textView;
-        public final ImageView imageView;
+        private DLamp lamp;
 
         public LampViewHolder(View itemView, LampAdapter adapter) {
             super(itemView);
@@ -36,38 +34,42 @@ public class LampAdapter extends RecyclerView.Adapter<LampAdapter.LampViewHolder
             itemView.setOnClickListener(this);
         }
 
+        public void setLamp(DLamp lamp) {
+            this.lamp = lamp;
+
+            this.textView.setText(this.lamp.name);
+            this.imageView.setColorFilter(this.lamp.state.getColor().asAndroidColor().toArgb());
+
+            if(this.lamp.state.on) this.imageView.setImageResource(R.drawable.ic_lamp_on);
+            else this.imageView.setImageResource(R.drawable.ic_lamp_off);
+        }
+
         @Override
         public void onClick(View v) {
-            int clickedPosition = getAdapterPosition();
-            clickListener.onItemClick(clickedPosition);
+            lampVM.select(this.lamp);
         }
     }
 
-    public LampAdapter(Context appContext, List<DLamp> lampList, OnItemClickListener clickListener) {
-        AppContext = appContext;
-        this.lampList = lampList;
-        this.clickListener = clickListener;
+    public LampAdapter(LampViewModel lampVM) {
+        this.lampVM = lampVM;
     }
 
     @NonNull
     @Override
     public LampViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemview = LayoutInflater.from(parent.getContext()).inflate(R.layout.lamp_list_item,parent,false);
+        View itemview = LayoutInflater.from(parent.getContext()).inflate(R.layout.lamp_list_item, parent,false);
         LampViewHolder viewHolder = new LampViewHolder(itemview,this);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull LampViewHolder holder, int position) {
-        DLamp lamp = lampList.get(position);
-        holder.textView.setText(lamp.name);
-        holder.imageView.setColorFilter(lamp.state.getColor().asAndroidColor().toArgb());
-        if(lamp.state.on) holder.imageView.setImageResource(R.drawable.ic_lamp_on);
-        else holder.imageView.setImageResource(R.drawable.ic_lamp_off);
+        DLamp lamp = this.lampVM.getLamps().getValue().get(position);
+        holder.setLamp(lamp);
     }
 
     @Override
     public int getItemCount() {
-        return lampList.size();
+        return this.lampVM.getLamps().getValue().size();
     }
 }
