@@ -63,7 +63,7 @@ public class LampAdapter extends RecyclerView.Adapter<LampAdapter.LampViewHolder
     @Override
     public void onBindViewHolder(@NonNull LampViewHolder holder, int position) {
         DLamp lamp = lampList.get(position);
-        holder.textView.setText(lamp.getCaption());
+        holder.textView.setText("  "+lamp.name);
         int rgb = Color.HSVToColor(new float[] {
                 (float)Utility.map(lamp.state.hue, 0, 65535, 0, 360),
                 (float)Utility.map(lamp.state.sat,0, 254,0,1),

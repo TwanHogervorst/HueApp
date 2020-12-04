@@ -16,11 +16,5 @@ public class DLamp extends DAbstract {
     public Map<String, String> pointsymbol;
     public String uniqueid;
 
-    public String getCaption(){
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(" Philips lamp name: ");
-        stringBuilder.append(this.name);
-        return stringBuilder.toString();
-    }
 
 }
