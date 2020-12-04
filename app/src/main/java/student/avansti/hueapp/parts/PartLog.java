@@ -47,11 +47,11 @@ public abstract class PartLog {
     private static PartLog getInstance() {
         if(PartLog.instance == null) {
 
-            PartLog.instance = new PartSoutLog();
+            PartLog.setInstance(new PartSoutLog());
 
             try {
                 Log.i(PartLog.class.getSimpleName(), "PartLog Initializing...");
-                PartLog.instance = new PartAndroidLog();
+                PartLog.setInstance(new PartAndroidLog());
             }
             catch (RuntimeException ex) {
                 // jammer dan
@@ -60,6 +60,10 @@ public abstract class PartLog {
         }
 
         return PartLog.instance;
+    }
+
+    public static void setInstance(PartLog logInstance) {
+        PartLog.instance = logInstance;
     }
 
 }

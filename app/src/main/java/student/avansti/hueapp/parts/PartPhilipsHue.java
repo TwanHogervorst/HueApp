@@ -48,8 +48,8 @@ public class PartPhilipsHue {
         List<DLamp> result = new ArrayList<>();
 
         PartUrl partUrl = new PartUrl(this.apiUrl);
-        partUrl.addSubDir(username);
-        partUrl.addSubDir("lights");
+        partUrl.addSubPath(username);
+        partUrl.addSubPath("lights");
 
         try (Response response = this.doApiRequest(partUrl)) {
             if(response != null) {
@@ -66,7 +66,7 @@ public class PartPhilipsHue {
                         .collect(Collectors.toList());
             }
         }
-        catch (IOException ex) {
+        catch (Exception ex) {
             PartLog.error(PartPhilipsHue.LOG_TAG, ex.getLocalizedMessage());
         }
 
@@ -101,10 +101,10 @@ public class PartPhilipsHue {
         this.checkIfSetup();
 
         PartUrl partUrl = new PartUrl(this.apiUrl);
-        partUrl.addSubDir(this.username);
-        partUrl.addSubDir("lights");
-        partUrl.addSubDir(lampId);
-        partUrl.addSubDir("state");
+        partUrl.addSubPath(this.username);
+        partUrl.addSubPath("lights");
+        partUrl.addSubPath(lampId);
+        partUrl.addSubPath("state");
 
         DSetPowerStateRequestBody body = new DSetPowerStateRequestBody(onState);
 
@@ -121,10 +121,10 @@ public class PartPhilipsHue {
         this.checkIfSetup();
 
         PartUrl partUrl = new PartUrl(this.apiUrl);
-        partUrl.addSubDir(this.username);
-        partUrl.addSubDir("lights");
-        partUrl.addSubDir(lampId);
-        partUrl.addSubDir("state");
+        partUrl.addSubPath(this.username);
+        partUrl.addSubPath("lights");
+        partUrl.addSubPath(lampId);
+        partUrl.addSubPath("state");
 
         DSetColorRequestBody body = new DSetColorRequestBody(color);
 

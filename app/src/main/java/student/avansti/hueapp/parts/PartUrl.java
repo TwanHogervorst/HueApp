@@ -10,17 +10,25 @@ public class PartUrl {
     private String url;
 
     private Map<String, String> queryParams;
-    private List<String> subDirList;
+    private List<String> subPathList;
 
     public PartUrl(String url) {
         this.url = url;
 
         this.queryParams = new HashMap<>();
-        this.subDirList = new LinkedList<>();
+        this.subPathList = new LinkedList<>();
     }
 
-    public void addSubDir(String dirName) {
-        this.subDirList.add(dirName);
+    public void addSubPath(String subPathName) {
+        this.subPathList.add(subPathName);
+    }
+
+    public boolean containsSubPath(String subPathName) {
+        return this.subPathList.contains(subPathName);
+    }
+
+    public void removeSubPath(String subPathName) {
+        this.subPathList.remove(subPathName);
     }
 
     public void addQueryParam(String key, String value) {
@@ -39,14 +47,16 @@ public class PartUrl {
         // Create StringBuilder based on base url
         StringBuilder sb = new StringBuilder(this.url);
 
-        // Add subdirs
-        for(String subdir : this.subDirList) {
+        // Add subpaths
+        for(String subPath : this.subPathList) {
             if(sb.charAt(sb.length() - 1) != '/') sb.append('/');
-            sb.append(subdir);
+            sb.append(subPath);
         }
 
-        // Add Query Parameters
+        // remove last /
         if(sb.charAt(sb.length() - 1) == '/') sb.deleteCharAt(sb.length() - 1);
+
+        // Add Query Parameters
         boolean isFirst = true;
         for(Map.Entry<String, String> queryParam : this.queryParams.entrySet()) {
             if(isFirst) { sb.append('?'); isFirst = false; }

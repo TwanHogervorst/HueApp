@@ -8,17 +8,54 @@ import java.util.List;
 
 import student.avansti.hueapp.Color;
 import student.avansti.hueapp.data.DLamp;
+import student.avansti.hueapp.mocks.PartLogMock;
 
 public class PartPhilipsHueTest extends TestCase {
-
-    private final String BRIDGE_HOST = "192.168.1.43:80";
-    private final String USERNAME = "newdeveloper";
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        PartPhilipsHue.getInstance().setBridge("192.168.1.43:80","newdeveloper");
+        PartPhilipsHue.getInstance().setBridge("127.0.0.1:80","newdeveloper");
+    }
+
+    public void testSetBridge() {
+
+        PartPhilipsHue partPhilipsHue = PartPhilipsHue.getInstance();
+        List<DLamp> lampList = partPhilipsHue.getLamps();
+
+        // current bridge (127.0.0.1:80) works
+        assertTrue(lampList.size() > 0);
+
+        // "localhost" also works
+        partPhilipsHue.setBridge("localhost", "newdeveloper");
+
+        lampList = partPhilipsHue.getLamps();
+        assertTrue(lampList.size() > 0);
+
+        // We know this part will log errors, so we mock the log dependecy
+        PartLog.setInstance(new PartLogMock());
+
+        // Wrong ip fails
+        partPhilipsHue.setBridge("192.168.1.1", "newdeveloper");
+
+        lampList = partPhilipsHue.getLamps();
+        assertFalse(lampList.size() > 0);
+
+        // wrong (but real) host fails
+        partPhilipsHue.setBridge("example.com", "newdeveloper");
+
+        lampList = partPhilipsHue.getLamps();
+        assertFalse(lampList.size() > 0);
+
+        // wrong username fails
+        partPhilipsHue.setBridge("127.0.0.1:80", "unittestwrong");
+
+        lampList = partPhilipsHue.getLamps();
+        assertFalse(lampList.size() > 0);
+
+        // return to normal log behaviour
+        PartLog.setInstance(null);
     }
 
     public void testGetLights() {
