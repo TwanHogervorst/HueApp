@@ -1,6 +1,5 @@
-package student.avansti.hueapp;
+package student.avansti.hueapp.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,11 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import student.avansti.hueapp.data.DLamp;
-import student.avansti.hueapp.parts.PartPhilipsHue;
+import student.avansti.hueapp.R;
+import student.avansti.hueapp.ui.adapter.LampAdapter;
 import student.avansti.hueapp.viewmodels.LampViewModel;
 
 public class LampListFragment extends Fragment {
@@ -70,12 +66,6 @@ public class LampListFragment extends Fragment {
         list.setAdapter(this.lampAdapter);
 
         this.refreshLamps();
-    }
-
-    @Override
-    public void onItemClick(int clickedPosition) {
-        NavHostFragment.findNavController(this)
-                .navigate(R.id.action_lampListFragment_to_lampDetailFragment);
     }
 
     public void onClick(View view){

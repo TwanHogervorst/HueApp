@@ -5,7 +5,7 @@
 
     <fragment
         android:id="@+id/lampListFragment"
-        android:name="student.avansti.hueapp.LampListFragment"
+        android:name="student.avansti.hueapp.ui.fragment.LampListFragment"
         android:label="LampListFragment" >
         <action
             android:id="@+id/action_lampListFragment_to_lampDetailFragment"
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/lampDetailFragment"
-        android:name="student.avansti.hueapp.LampDetailFragment"
+        android:name="student.avansti.hueapp.ui.fragment.LampDetailFragment"
         android:label="LampDetailFragment" >
         <action
             android:id="@+id/action_lampDetailFragment_to_lampListFragment"
@@ -24,6 +24,6 @@
     </fragment>
     <fragment
         android:id="@+id/lampSettingsFragment"
-        android:name="student.avansti.hueapp.LampSettingsFragment"
+        android:name="student.avansti.hueapp.ui.fragment.LampSettingsFragment"
         android:label="LampSettingsFragment" />
 </navigation>

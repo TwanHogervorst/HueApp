@@ -1,4 +1,4 @@
-package student.avansti.hueapp;
+package student.avansti.hueapp.ui.fragment;
 
 import android.os.Bundle;
 
@@ -20,8 +20,9 @@ import codes.side.andcolorpicker.group.PickerGroup;
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar;
 import codes.side.andcolorpicker.model.IntegerHSLColor;
 import codes.side.andcolorpicker.view.picker.ColorSeekBar;
+import student.avansti.hueapp.Color;
+import student.avansti.hueapp.R;
 import student.avansti.hueapp.data.DLamp;
-import student.avansti.hueapp.data.DLampState;
 import student.avansti.hueapp.parts.PartPhilipsHue;
 import student.avansti.hueapp.viewmodels.LampViewModel;
 

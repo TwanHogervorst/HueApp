@@ -1,4 +1,4 @@
-package student.avansti.hueapp;
+package student.avansti.hueapp.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Dispatcher;
+import student.avansti.hueapp.R;
 import student.avansti.hueapp.data.DLamp;
 import student.avansti.hueapp.parts.PartPhilipsHue;
 

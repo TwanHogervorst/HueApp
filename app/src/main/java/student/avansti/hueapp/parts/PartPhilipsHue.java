@@ -1,15 +1,10 @@
 package student.avansti.hueapp.parts;
 
-import android.util.Log;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -20,7 +15,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import student.avansti.hueapp.Color;
-import student.avansti.hueapp.MainActivity;
 import student.avansti.hueapp.Utility;
 import student.avansti.hueapp.data.DAbstract;
 import student.avansti.hueapp.data.DLamp;

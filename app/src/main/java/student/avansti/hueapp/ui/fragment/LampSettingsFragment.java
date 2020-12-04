@@ -1,4 +1,4 @@
-package student.avansti.hueapp;
+package student.avansti.hueapp.ui.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import student.avansti.hueapp.R;
 import student.avansti.hueapp.parts.PartPhilipsHue;
 
 public class LampSettingsFragment extends Fragment {
@@ -38,11 +39,18 @@ public class LampSettingsFragment extends Fragment {
 
         entry_username = view.findViewById(R.id.username);
         entry_ip = view.findViewById(R.id.ip);
+
+        SharedPreferences prefs = this.requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
+
+        entry_username.setText(prefs.getString("username","newdeveloper"));
+        entry_ip.setText(prefs.getString("ip", "localhost"));
     }
 
     @Override
     public void onStop() {
         super.onStop();
+
+
         SharedPreferences prefs = this.requireActivity().getSharedPreferences("settings", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         if (!entry_username.getText().toString().equals("")) {

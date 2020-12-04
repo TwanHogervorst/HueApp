@@ -1,6 +1,5 @@
-package student.avansti.hueapp;
+package student.avansti.hueapp.ui.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,11 +7,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
-
+import student.avansti.hueapp.R;
 import student.avansti.hueapp.data.DLamp;
 import student.avansti.hueapp.viewmodels.LampViewModel;
 
