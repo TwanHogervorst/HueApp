@@ -49,6 +49,7 @@ public class LampDetailFragment extends Fragment {
 
         this.image = view.findViewById(R.id.imageView_detail);
         this.lamp = new DLamp(); // todo: Get lamp
+        this.image.setOnClickListener(this::onClick);
 
         TextView name = view.findViewById(R.id.name);
         TextView lastInstall = view.findViewById(R.id.lastInstall);

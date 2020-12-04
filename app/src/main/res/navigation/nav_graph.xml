@@ -10,6 +10,9 @@
         <action
             android:id="@+id/action_lampListFragment_to_lampDetailFragment"
             app:destination="@id/lampDetailFragment" />
+        <action
+            android:id="@+id/action_lampListFragment_to_lampSettingsFragment"
+            app:destination="@id/lampSettingsFragment" />
     </fragment>
     <fragment
         android:id="@+id/lampDetailFragment"
@@ -19,4 +22,8 @@
             android:id="@+id/action_lampDetailFragment_to_lampListFragment"
             app:destination="@id/lampListFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/lampSettingsFragment"
+        android:name="student.avansti.hueapp.LampSettingsFragment"
+        android:label="LampSettingsFragment" />
 </navigation>

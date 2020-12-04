@@ -44,6 +44,8 @@ public class LampListFragment extends Fragment implements LampAdapter.OnItemClic
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        view.findViewById(R.id.imageView2).setOnClickListener(this::onClick);
+
 
         this.swiperefresh_main = view.findViewById(R.id.swiperefresh_main);
         this.swiperefresh_main.setOnRefreshListener(this::refreshLamps);
@@ -61,6 +63,11 @@ public class LampListFragment extends Fragment implements LampAdapter.OnItemClic
     public void onItemClick(int clickedPosition) {
         NavHostFragment.findNavController(this)
                 .navigate(R.id.action_lampListFragment_to_lampDetailFragment);
+    }
+
+    public void onClick(View view){
+        NavHostFragment.findNavController(this)
+                .navigate(R.id.action_lampListFragment_to_lampSettingsFragment);
     }
 
     private void refreshLamps() {
