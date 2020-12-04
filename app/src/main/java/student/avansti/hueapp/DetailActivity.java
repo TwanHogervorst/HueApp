@@ -111,7 +111,7 @@ public class DetailActivity extends AppCompatActivity {
             state.setText("ON");
 
             new Thread(() -> {
-                PartPhilipsHue partPhilipsHue = new PartPhilipsHue("192.168.1.43:80", "newdeveloper");
+                PartPhilipsHue partPhilipsHue = new PartPhilipsHue("10.0.1.12:80", "newdeveloper");
                 partPhilipsHue.setLampPowerState(this.lamp, true);
                 this.lamp = partPhilipsHue.getLampById(this.lamp.id);
 
@@ -124,7 +124,7 @@ public class DetailActivity extends AppCompatActivity {
             state.setText("OFF");
 
             new Thread(() -> {
-                PartPhilipsHue partPhilipsHue = new PartPhilipsHue("192.168.1.43:80", "newdeveloper");
+                PartPhilipsHue partPhilipsHue = new PartPhilipsHue("10.0.1.12:80", "newdeveloper");
                 partPhilipsHue.setLampPowerState(this.lamp, false);
                 this.lamp = partPhilipsHue.getLampById(this.lamp.id);
             }).start();
@@ -133,7 +133,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private void setLampColor(Color color) {
         new Thread(() -> {
-            PartPhilipsHue partPhilipsHue = new PartPhilipsHue("192.168.1.43:80", "newdeveloper");
+            PartPhilipsHue partPhilipsHue = new PartPhilipsHue("10.0.1.12:80", "newdeveloper");
             partPhilipsHue.setLampColor(this.lamp, color);
             this.lamp = partPhilipsHue.getLampById(this.lamp.id);
         }).start();
