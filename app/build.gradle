@@ -48,4 +48,6 @@ dependencies {
 
     // Color Picker
     implementation "codes.side:andcolorpicker:0.5.0"
+
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
 }

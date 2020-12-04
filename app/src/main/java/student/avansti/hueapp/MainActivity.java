@@ -3,6 +3,7 @@ package student.avansti.hueapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,24 +19,28 @@ public class MainActivity extends AppCompatActivity implements LampAdapter.OnIte
 
     private List<DLamp> lamps;
     private LampAdapter lampAdapter;
+    private SwipeRefreshLayout swiperefresh_main;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        swiperefresh_main = this.findViewById(R.id.swiperefresh_main);
+        swiperefresh_main.setOnRefreshListener(this::refreshLamps);
+
         this.lamps = new ArrayList<>();
-        lampAdapter = new LampAdapter(this,lamps,this);
-
-        new Thread(() -> {
-            this.lamps.addAll(new PartPhilipsHue("192.168.1.43:80", "newdeveloper").getLamps());
-            this.runOnUiThread(() -> {
-                this.lampAdapter.notifyDataSetChanged();
-            });
-        }).start();
-
+        this.lampAdapter = new LampAdapter(this,lamps,this);
         RecyclerView list = findViewById(R.id.recyclerview_main);
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(lampAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        this.refreshLamps();
     }
 
     @Override
@@ -43,5 +48,18 @@ public class MainActivity extends AppCompatActivity implements LampAdapter.OnIte
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(DetailActivity.detail,lamps.get(clickedPosition));
         startActivity(intent);
+    }
+
+    private void refreshLamps() {
+        this.swiperefresh_main.setRefreshing(true);
+
+        new Thread(() -> {
+            this.lamps.clear();
+            this.lamps.addAll(new PartPhilipsHue("192.168.1.43:80", "newdeveloper").getLamps());
+            this.runOnUiThread(() -> {
+                this.lampAdapter.notifyDataSetChanged();
+                this.swiperefresh_main.setRefreshing(false);
+            });
+        }).start();
     }
 }

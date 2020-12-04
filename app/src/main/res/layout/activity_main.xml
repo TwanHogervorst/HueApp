@@ -11,19 +11,27 @@
         android:id="@+id/imageView"
         android:layout_width="211dp"
         android:layout_height="210dp"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerview_main"
+        app:layout_constraintBottom_toBottomOf="@+id/swiperefresh_main"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/AppTitle"
         app:srcCompat="@drawable/pngfind_com_philips_logo_png_2050196" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview_main"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh_main"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AppTitle"
-        tools:layout_editor_absoluteX="-4dp" />
+        app:layout_constraintTop_toBottomOf="@+id/AppTitle">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview_main"
+            android:layout_width="match_parent"
+            android:layout_height="0dp" />
+
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     <TextView
         android:id="@+id/AppTitle"

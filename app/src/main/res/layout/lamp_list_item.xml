@@ -15,6 +15,7 @@
         android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/item_background"
+        android:paddingLeft="5dp"
          />
 
     <ImageView
@@ -25,8 +26,8 @@
         app:layout_constraintEnd_toEndOf="@+id/item_list_textView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/item_color"
-        android:padding="1dp"/>
+        android:padding="1dp"
+        app:srcCompat="@drawable/ic_launcher_foreground"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
