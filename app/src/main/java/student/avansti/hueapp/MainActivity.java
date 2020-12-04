@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements LampAdapter.OnIte
         lampAdapter = new LampAdapter(this,lamps,this);
 
         new Thread(() -> {
-            this.lamps.addAll(new PartPhilipsHue("10.0.1.12:8000", "newdeveloper").getLamps());
+            this.lamps.addAll(new PartPhilipsHue("10.0.1.12:80", "newdeveloper").getLamps());
             this.runOnUiThread(() -> {
                 this.lampAdapter.notifyDataSetChanged();
             });

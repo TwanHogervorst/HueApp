@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import student.avansti.hueapp.data.DLamp;
+import student.avansti.hueapp.data.DLampState;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -21,15 +22,12 @@ public class DetailActivity extends AppCompatActivity {
         DLamp lamp = (DLamp) getIntent().getSerializableExtra(detail);
 
         TextView name = findViewById(R.id.name);
-        TextView state = findViewById(R.id.state);
-        TextView color = findViewById(R.id.color);
         TextView lastInstall = findViewById(R.id.lastInstall);
         TextView type = findViewById(R.id.type);
         TextView modelID = findViewById(R.id.modelID);
         ImageView image = findViewById(R.id.imageView_detail);
 
-        name.setText("Lamp name: " + lamp.name);
-        state.setText(lamp.state.toJson());
+        name.setText(" Lamp name: " + lamp.name);
 
         int rgb = Color.HSVToColor(new float[] {
                 (float)Utility.map(lamp.state.hue, 0, 65535, 0, 360),
@@ -37,12 +35,10 @@ public class DetailActivity extends AppCompatActivity {
                 (float)Utility.map(lamp.state.bri,1,254,0, 1)
         });
 
-        color.setText(Color.valueOf(rgb).toString());
-
         image.setColorFilter(rgb);
-        lastInstall.setText("Version: " + lamp.swversion);
-        type.setText("Type: " + lamp.type);
-        modelID.setText("ModelID: " + lamp.modelid);
+        lastInstall.setText(" Version: " + lamp.swversion);
+        type.setText(" Type: " + lamp.type);
+        modelID.setText(" ModelID: " + lamp.modelid);
 
     }
 }
