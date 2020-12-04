@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements LampAdapter.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        PartPhilipsHue.getInstance().setBridge("192.168.1.43:80", "newdeveloper");
+
         swiperefresh_main = this.findViewById(R.id.swiperefresh_main);
         swiperefresh_main.setOnRefreshListener(this::refreshLamps);
 
@@ -55,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements LampAdapter.OnIte
 
         new Thread(() -> {
             this.lamps.clear();
-            this.lamps.addAll(new PartPhilipsHue("192.168.1.43:80", "newdeveloper").getLamps());
+            this.lamps.addAll(PartPhilipsHue.getInstance().getLamps());
             this.runOnUiThread(() -> {
                 this.lampAdapter.notifyDataSetChanged();
                 this.swiperefresh_main.setRefreshing(false);

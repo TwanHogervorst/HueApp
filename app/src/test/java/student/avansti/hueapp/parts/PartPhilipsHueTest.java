@@ -1,5 +1,7 @@
 package student.avansti.hueapp.parts;
 
+import android.provider.Telephony;
+
 import junit.framework.TestCase;
 
 import java.util.List;
@@ -12,10 +14,16 @@ public class PartPhilipsHueTest extends TestCase {
     private final String BRIDGE_HOST = "192.168.1.43:80";
     private final String USERNAME = "newdeveloper";
 
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+
+        PartPhilipsHue.getInstance().setBridge("192.168.1.43:80","newdeveloper");
+    }
 
     public void testGetLights() {
 
-        PartPhilipsHue partPhilipsHue = new PartPhilipsHue(this.BRIDGE_HOST, this.USERNAME);
+        PartPhilipsHue partPhilipsHue = PartPhilipsHue.getInstance();
         List<DLamp> lampList = partPhilipsHue.getLamps();
 
         assertTrue(lampList.size() > 0);
@@ -24,7 +32,7 @@ public class PartPhilipsHueTest extends TestCase {
 
     public void testGetLampById() {
 
-        PartPhilipsHue partPhilipsHue = new PartPhilipsHue(this.BRIDGE_HOST, this.USERNAME);
+        PartPhilipsHue partPhilipsHue = PartPhilipsHue.getInstance();
         List<DLamp> lampList = partPhilipsHue.getLamps();
 
         assertTrue(lampList.size() > 0);
@@ -40,7 +48,7 @@ public class PartPhilipsHueTest extends TestCase {
 
     public void testGetLampByUniqueId() {
 
-        PartPhilipsHue partPhilipsHue = new PartPhilipsHue(this.BRIDGE_HOST, this.USERNAME);
+        PartPhilipsHue partPhilipsHue = PartPhilipsHue.getInstance();
         List<DLamp> lampList = partPhilipsHue.getLamps();
 
         assertTrue(lampList.size() > 0);
@@ -56,7 +64,7 @@ public class PartPhilipsHueTest extends TestCase {
 
     public void testSetLightPowerState() {
 
-        PartPhilipsHue partPhilipsHue = new PartPhilipsHue(this.BRIDGE_HOST, this.USERNAME);
+        PartPhilipsHue partPhilipsHue = PartPhilipsHue.getInstance();
         List<DLamp> lampList = partPhilipsHue.getLamps();
 
         assertTrue(lampList.size() > 0);
@@ -83,7 +91,7 @@ public class PartPhilipsHueTest extends TestCase {
 
     public void testSetLightColor() {
 
-        PartPhilipsHue partPhilipsHue = new PartPhilipsHue(this.BRIDGE_HOST, this.USERNAME);
+        PartPhilipsHue partPhilipsHue = PartPhilipsHue.getInstance();
         List<DLamp> lampList = partPhilipsHue.getLamps();
 
         assertTrue(lampList.size() > 0);

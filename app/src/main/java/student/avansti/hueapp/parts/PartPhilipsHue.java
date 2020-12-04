@@ -29,22 +29,28 @@ public class PartPhilipsHue {
 
     private static final String LOG_TAG = PartPhilipsHue.class.getSimpleName();
 
+    private static PartPhilipsHue instance;
+
     private OkHttpClient httpClient;
 
     private String apiUrl;
     private String username;
 
-    public PartPhilipsHue(String bridgeHost, String username) {
-        if (Utility.stringIsNullOrWhitespace(bridgeHost)) throw new IllegalArgumentException("bridgeHost cannot be empty");
-        if(Utility.stringIsNullOrWhitespace(username)) throw new IllegalArgumentException("username cannot be empty");
-
-        this.apiUrl = "http://" + bridgeHost + "/api";
-        this.username = username;
-
+    private PartPhilipsHue() {
         this.httpClient = new OkHttpClient();
     }
 
+    public void setBridge(String host, String username) {
+        if (Utility.stringIsNullOrWhitespace(host)) throw new IllegalArgumentException("bridgeHost cannot be empty");
+        if(Utility.stringIsNullOrWhitespace(username)) throw new IllegalArgumentException("username cannot be empty");
+
+        this.apiUrl = "http://" + host + "/api";
+        this.username = username;
+    }
+
     public List<DLamp> getLamps() {
+        this.checkIfSetup();
+
         List<DLamp> result = new ArrayList<>();
 
         PartUrl partUrl = new PartUrl(this.apiUrl);
@@ -98,6 +104,8 @@ public class PartPhilipsHue {
     public void setLampPowerState(String lampId, boolean onState) {
         if(lampId == null) throw new NullPointerException("lampId is null");
 
+        this.checkIfSetup();
+
         PartUrl partUrl = new PartUrl(this.apiUrl);
         partUrl.addSubDir(this.username);
         partUrl.addSubDir("lights");
@@ -115,6 +123,8 @@ public class PartPhilipsHue {
 
     public void setLampColor(String lampId, Color color) {
         if(lampId == null) throw new NullPointerException("lampId is null");
+
+        this.checkIfSetup();
 
         PartUrl partUrl = new PartUrl(this.apiUrl);
         partUrl.addSubDir(this.username);
@@ -157,6 +167,16 @@ public class PartPhilipsHue {
         if(discardResponse && result != null) result.close();
 
         return result;
+    }
+
+    private void checkIfSetup() {
+        if (Utility.stringIsNullOrWhitespace(this.apiUrl) || Utility.stringIsNullOrWhitespace(this.username))
+            throw new UnsupportedOperationException("There is no bridge setup using PartPhilipsHue.setBridge()");
+    }
+
+    public static PartPhilipsHue getInstance() {
+        if(PartPhilipsHue.instance == null) PartPhilipsHue.instance = new PartPhilipsHue();
+        return PartPhilipsHue.instance;
     }
 
     private static class DSetPowerStateRequestBody extends DAbstract {

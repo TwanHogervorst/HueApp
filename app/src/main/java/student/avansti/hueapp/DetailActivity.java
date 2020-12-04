@@ -1,7 +1,6 @@
 package student.avansti.hueapp;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,19 +10,12 @@ import androidx.core.graphics.ColorUtils;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-
-import codes.side.andcolorpicker.converter.IntegerHSLColorConverter;
 import codes.side.andcolorpicker.group.PickerGroup;
 import codes.side.andcolorpicker.hsl.HSLColorPickerSeekBar;
-import codes.side.andcolorpicker.model.IntegerColor;
 import codes.side.andcolorpicker.model.IntegerHSLColor;
-import codes.side.andcolorpicker.model.IntegerRGBColor;
 import codes.side.andcolorpicker.view.picker.ColorSeekBar;
 import student.avansti.hueapp.data.DLamp;
-import student.avansti.hueapp.parts.PartLog;
 import student.avansti.hueapp.parts.PartPhilipsHue;
-import student.avansti.hueapp.data.DLampState;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -57,9 +49,11 @@ public class DetailActivity extends AppCompatActivity {
         if (lamp.state.on) {
             state.setText("ON");
             image.setColorFilter(lamp.state.getColor().asAndroidColor().toArgb());
+            image.setImageResource(R.drawable.ic_lamp_on);
         }else{
             state.setText("OFF");
             image.setColorFilter(android.graphics.Color.WHITE);
+            image.setImageResource(R.drawable.ic_lamp_off);
         }
 
         colorPickerGroup.registerPicker(hueSeekBar);
@@ -106,36 +100,44 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void onClick(View view){
-        lamp.state.on = !lamp.state.on;
-        if (lamp.state.on){
-            state.setText("ON");
+        new Thread(() -> {
+            PartPhilipsHue partPhilipsHue = PartPhilipsHue.getInstance();
+            partPhilipsHue.setLampPowerState(this.lamp, !this.lamp.state.on);
+            this.lamp = partPhilipsHue.getLampById(this.lamp.id);
 
-            new Thread(() -> {
-                PartPhilipsHue partPhilipsHue = new PartPhilipsHue("192.168.1.43:80", "newdeveloper");
-                partPhilipsHue.setLampPowerState(this.lamp, true);
-                this.lamp = partPhilipsHue.getLampById(this.lamp.id);
-
-                this.runOnUiThread(() -> {
+            this.runOnUiThread(() -> {
+                if(this.lamp.state.on) {
+                    this.state.setText("ON");
                     this.image.setColorFilter(lamp.state.getColor().asAndroidColor().toArgb());
-                });
-            }).start();
-        }else{
-            image.setColorFilter(android.graphics.Color.WHITE);
-            state.setText("OFF");
-
-            new Thread(() -> {
-                PartPhilipsHue partPhilipsHue = new PartPhilipsHue("192.168.1.43:80", "newdeveloper");
-                partPhilipsHue.setLampPowerState(this.lamp, false);
-                this.lamp = partPhilipsHue.getLampById(this.lamp.id);
-            }).start();
-        }
+                    this.image.setImageResource(R.drawable.ic_lamp_on);
+                }
+                else {
+                    state.setText("OFF");
+                    this.image.setColorFilter(android.graphics.Color.WHITE);
+                    this.image.setImageResource(R.drawable.ic_lamp_off);
+                }
+            });
+        }).start();
     }
 
     private void setLampColor(Color color) {
         new Thread(() -> {
-            PartPhilipsHue partPhilipsHue = new PartPhilipsHue("192.168.1.43:80", "newdeveloper");
+            PartPhilipsHue partPhilipsHue = PartPhilipsHue.getInstance();
             partPhilipsHue.setLampColor(this.lamp, color);
             this.lamp = partPhilipsHue.getLampById(this.lamp.id);
+
+            this.runOnUiThread(() -> {
+                if(this.lamp.state.on) {
+                    this.state.setText("ON");
+                    this.image.setColorFilter(lamp.state.getColor().asAndroidColor().toArgb());
+                    this.image.setImageResource(R.drawable.ic_lamp_on);
+                }
+                else {
+                    state.setText("OFF");
+                    this.image.setColorFilter(android.graphics.Color.WHITE);
+                    this.image.setImageResource(R.drawable.ic_lamp_off);
+                }
+            });
         }).start();
 
         float[] hsl = new float[3];
@@ -147,8 +149,5 @@ public class DetailActivity extends AppCompatActivity {
         hslColor.setFloatL(hsl[2]);
 
         colorPickerGroup.setColor(hslColor);
-
-        this.image.setColorFilter(color.asAndroidColor().toArgb());
-        this.state.setText("ON");
     }
 }
