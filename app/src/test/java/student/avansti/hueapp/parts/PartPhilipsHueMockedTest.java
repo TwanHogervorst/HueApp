@@ -1,5 +1,7 @@
 package student.avansti.hueapp.parts;
 
+import android.provider.Telephony;
+
 import junit.framework.TestCase;
 
 import java.util.List;
@@ -15,18 +17,20 @@ import student.avansti.hueapp.data.DLamp;
 
 public class PartPhilipsHueMockedTest extends TestCase {
 
-    private final String BRIDGE_HOST = "192.168.1.43:80";
-    private final String USERNAME = "newdeveloper";
-
     private final MockWebServer mockWebServer = new MockWebServer();
 
     @Override
     protected void setUp() throws Exception {
+        super.setUp();
+
         this.mockWebServer.start();
+        PartPhilipsHue.getInstance().setBridge(this.getMockHost(), "newdeveloper");
     }
 
     @Override
     protected void tearDown() throws Exception {
+        super.tearDown();
+
         this.mockWebServer.shutdown();
     }
 
@@ -34,7 +38,7 @@ public class PartPhilipsHueMockedTest extends TestCase {
 
         this.enqueueDefaultResponse();
 
-        PartPhilipsHue partPhilipsHue = new PartPhilipsHue(this.getMockHost(), this.USERNAME);
+        PartPhilipsHue partPhilipsHue = PartPhilipsHue.getInstance();
         List<DLamp> lampList = partPhilipsHue.getLamps();
 
         assertTrue(lampList.size() > 0);
@@ -46,7 +50,7 @@ public class PartPhilipsHueMockedTest extends TestCase {
         this.enqueueDefaultResponse();
         this.enqueueDefaultResponse();
 
-        PartPhilipsHue partPhilipsHue = new PartPhilipsHue(this.getMockHost(), this.USERNAME);
+        PartPhilipsHue partPhilipsHue = PartPhilipsHue.getInstance();
         List<DLamp> lampList = partPhilipsHue.getLamps();
 
         assertTrue(lampList.size() > 0);
@@ -65,7 +69,7 @@ public class PartPhilipsHueMockedTest extends TestCase {
         this.enqueueDefaultResponse();
         this.enqueueDefaultResponse();
 
-        PartPhilipsHue partPhilipsHue = new PartPhilipsHue(this.getMockHost(), this.USERNAME);
+        PartPhilipsHue partPhilipsHue = PartPhilipsHue.getInstance();
         List<DLamp> lampList = partPhilipsHue.getLamps();
 
         assertTrue(lampList.size() > 0);
@@ -84,7 +88,7 @@ public class PartPhilipsHueMockedTest extends TestCase {
         this.enqueueDefaultResponse();
         this.mockWebServer.enqueue(new MockResponse().setResponseCode(200));
 
-        PartPhilipsHue partPhilipsHue = new PartPhilipsHue(this.getMockHost(), this.USERNAME);
+        PartPhilipsHue partPhilipsHue = PartPhilipsHue.getInstance();
         List<DLamp> lampList = partPhilipsHue.getLamps();
         this.mockWebServer.takeRequest(100, TimeUnit.MILLISECONDS);
 
@@ -111,7 +115,7 @@ public class PartPhilipsHueMockedTest extends TestCase {
         this.enqueueDefaultResponse();
         this.mockWebServer.enqueue(new MockResponse().setResponseCode(200));
 
-        PartPhilipsHue partPhilipsHue = new PartPhilipsHue(this.getMockHost(), this.USERNAME);
+        PartPhilipsHue partPhilipsHue = PartPhilipsHue.getInstance();
         List<DLamp> lampList = partPhilipsHue.getLamps();
         this.mockWebServer.takeRequest(100, TimeUnit.MILLISECONDS);
 

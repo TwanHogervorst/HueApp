@@ -1,12 +1,9 @@
 package student.avansti.hueapp;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -65,7 +62,8 @@ public class LampAdapter extends RecyclerView.Adapter<LampAdapter.LampViewHolder
         DLamp lamp = lampList.get(position);
         holder.textView.setText(lamp.name);
         holder.imageView.setColorFilter(lamp.state.getColor().asAndroidColor().toArgb());
-
+        if(lamp.state.on) holder.imageView.setImageResource(R.drawable.ic_lamp_on);
+        else holder.imageView.setImageResource(R.drawable.ic_lamp_off);
     }
 
     @Override
